@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PinCode API - Fast & Reliable Indian Postal Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow p-4 flex justify-between items-center max-w-5xl mx-auto rounded-b-lg">
+        <h1 class="text-xl font-bold text-blue-600">⚡ PinCodeAPI.io</h1>
+        <a href="/docs" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700">API Docs</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="max-w-3xl mx-auto text-center py-16 px-4">
+        <h2 class="text-4xl font-extrabold mb-4">The Ultimate Indian PIN Code & Location API</h2>
+        <p class="text-gray-600 mb-8">Integrate lightning-fast PIN code lookup, state, district, and coordinates into your e-commerce or logistics app.</p>
+        
+        <!-- Live Tester Box -->
+        <div class="bg-white p-6 rounded-xl shadow-md flex flex-col sm:flex-row gap-3">
+            <input type="text" id="pincodeInput" placeholder="Enter 6-digit PIN (e.g. 110001)" maxlength="6" class="flex-1 border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="checkPinCode()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700">Test API</button>
+        </div>
+
+        <!-- Result Box -->
+        <div id="resultBox" class="mt-6 hidden bg-white p-6 rounded-xl shadow text-left border-l-4 border-blue-600">
+            <h3 class="font-bold text-lg mb-2 text-gray-700">API Response:</h3>
+            <pre id="jsonOutput" class="bg-gray-900 text-green-400 p-4 rounded-lg text-sm overflow-x-auto"></pre>
+        </div>
+    </div>
+
+    <!-- JavaScript for API Request -->
+    <script>
+        async function checkPinCode() {
+            const pincode = document.getElementById('pincodeInput').value.trim();
+            const resultBox = document.getElementById('resultBox');
+            const jsonOutput = document.getElementById('jsonOutput');
+
+            if(!pincode || pincode.length !== 6) {
+                alert("Please enter a valid 6-digit PIN code.");
+                return;
+            }
+
+            resultBox.classList.remove('hidden');
+            jsonOutput.innerText = "Loading...";
+
+            try {
+                // Local testing ke liye 'http://127.0.0.1:8000' use hota hai. 
+                // Render par deploy karne ke baad yahan apna live URL dalna hoga.
+                const response = await fetch(`/api/v1/pincode/${pincode}`);
+                const data = await response.json();
+                
+                if(response.ok) {
+                    jsonOutput.innerText = JSON.stringify(data, null, 2);
+                } else {
+                    jsonOutput.innerText = JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                jsonOutput.innerText = "Error connecting to API server.";
+            }
+        }
+    </script>
+</body>
+</html>
